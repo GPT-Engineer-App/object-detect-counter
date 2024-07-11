@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { SupabaseProvider } from "./integrations/supabase/index.jsx";
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -11,3 +12,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </SupabaseProvider>
   </React.StrictMode>,
 );
+
+serviceWorker.register();
