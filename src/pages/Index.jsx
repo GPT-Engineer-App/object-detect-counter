@@ -1,10 +1,28 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState } from 'react';
+import Spinner from '@/components/ui/Spinner';
 
 const Index = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleDetection = () => {
+    setLoading(true);
+    // Simulate object detection process
+    setTimeout(() => {
+      setLoading(false);
+      // Handle detection result here
+    }, 3000);
+  };
+
   return (
     <div className="text-center">
-      <h1 className="text-3xl">Your Blank Canvas</h1>
-      <p>Chat with the agent to start making edits.</p>
+      <h1 className="text-3xl mb-4">Object Detection App</h1>
+      <button
+        onClick={handleDetection}
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Start Detection
+      </button>
+      {loading && <Spinner size="md" className="mt-4" />}
     </div>
   );
 };
