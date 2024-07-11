@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { useSupabase } from "@/integrations/supabase";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Layout = () => {
   const { session, supabase } = useSupabase();
@@ -10,13 +11,13 @@ const Layout = () => {
   };
 
   return (
-    <main className="flex flex-col min-h-screen overflow-auto items-center justify-center">
-      <nav className="flex space-x-4">
-        <NavLink to="/" className="text-blue-500">Home</NavLink>
+    <main className="flex flex-col min-h-screen overflow-auto items-center justify-center p-4">
+      <nav className="flex space-x-4 mb-4">
+        <NavLink to="/" className={({ isActive }) => cn("text-blue-500", isActive && "font-bold")}>Home</NavLink>
         {!session ? (
           <>
-            <NavLink to="/sign-up" className="text-blue-500">Sign Up</NavLink>
-            <NavLink to="/sign-in" className="text-blue-500">Sign In</NavLink>
+            <NavLink to="/sign-up" className={({ isActive }) => cn("text-blue-500", isActive && "font-bold")}>Sign Up</NavLink>
+            <NavLink to="/sign-in" className={({ isActive }) => cn("text-blue-500", isActive && "font-bold")}>Sign In</NavLink>
           </>
         ) : (
           <Button onClick={handleSignOut} className="text-blue-500">Sign Out</Button>

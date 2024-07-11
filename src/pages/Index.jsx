@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import { useCreateEvent, useReadEvents, useUpdateEvent, useDeleteEvent } from '@/integrations/supabase';
 import { useSupabase } from '@/integrations/supabase';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
@@ -60,48 +63,49 @@ const Index = () => {
   };
 
   return (
-    <div className="text-center">
-      <h1 className="text-3xl mb-4">Object Detection App</h1>
-      <input
-        type="text"
-        value={newEventName}
-        onChange={(e) => setNewEventName(e.target.value)}
-        placeholder="New Event Name"
-        className="px-4 py-2 border rounded mb-4"
-      />
-      <button
-        onClick={handleCreateEvent}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Create Event
-      </button>
-      {loading && <Spinner size="md" className="mt-4" />}
-      <div className="mt-8">
-        <h2 className="text-2xl mb-4">Events</h2>
-        {isLoadingEvents ? (
-          <Spinner size="md" />
-        ) : (
-          <ul>
-            {events?.map((event) => (
-              <li key={event.id} className="mb-2">
-                {event.name} - {new Date(event.date).toLocaleDateString()}
-                <button
-                  onClick={() => handleUpdateEvent(event.id)}
-                  className="ml-2 px-2 py-1 bg-yellow-500 text-white rounded"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDeleteEvent(event.id)}
-                  className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <div className="container mx-auto p-4">
+      <Card>
+        <CardHeader>
+          <h1 className="text-3xl mb-4">Object Detection App</h1>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4">
+            <Input
+              type="text"
+              value={newEventName}
+              onChange={(e) => setNewEventName(e.target.value)}
+              placeholder="New Event Name"
+              className="mb-2"
+            />
+            <Button onClick={handleCreateEvent} className="w-full">
+              Create Event
+            </Button>
+          </div>
+          {loading && <Spinner size="md" className="mt-4" />}
+          <div className="mt-8">
+            <h2 className="text-2xl mb-4">Events</h2>
+            {isLoadingEvents ? (
+              <Spinner size="md" />
+            ) : (
+              <ul>
+                {events?.map((event) => (
+                  <li key={event.id} className="mb-2 flex justify-between items-center">
+                    <span>{event.name} - {new Date(event.date).toLocaleDateString()}</span>
+                    <div className="flex space-x-2">
+                      <Button onClick={() => handleUpdateEvent(event.id)} variant="outline">
+                        Update
+                      </Button>
+                      <Button onClick={() => handleDeleteEvent(event.id)} variant="destructive">
+                        Delete
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

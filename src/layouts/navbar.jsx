@@ -20,7 +20,7 @@ const Layout = () => {
         <DesktopNav />
         <MobileNav />
       </header>
-      <main className="flex-grow overflow-auto">
+      <main className="flex-grow overflow-auto p-4">
         <Outlet />
       </main>
     </div>
