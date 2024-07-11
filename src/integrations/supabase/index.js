@@ -18,11 +18,3 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  */
 
 export default supabase;
-
-export const SupabaseProvider = ({ children }) => {
-  return (
-    <supabase.Provider value={supabase}>
-      {children}
-    </supabase.Provider>
-  );
-};
