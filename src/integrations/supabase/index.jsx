@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
@@ -10,6 +10,16 @@ const SupabaseContext = createContext();
 
 export const SupabaseProvider = ({ children }) => {
   const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  }, []);
 
   return (
     <SupabaseContext.Provider value={{ supabase, session, setSession }}>
@@ -108,4 +118,28 @@ export const useDeleteEvent = () => {
       },
     }
   );
+};
+
+// Authentication hooks
+export const useSignUp = () => {
+  return useMutation(async ({ email, password }) => {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) throw new Error(error.message);
+    return data;
+  });
+};
+
+export const useSignIn = () => {
+  return useMutation(async ({ email, password }) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
+    return data;
+  });
+};
+
+export const useSignOut = () => {
+  return useMutation(async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new Error(error.message);
+  });
 };

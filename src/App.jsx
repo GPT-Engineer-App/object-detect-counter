@@ -5,6 +5,10 @@ import { Home } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./layouts/default"; // available: default, navbar, sidebar
 import Index from "./pages/Index.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import SignIn from "./pages/SignIn.jsx";
+import { useSupabase } from "./integrations/supabase/index.jsx";
+
 const queryClient = new QueryClient();
 
 export const navItems = [
@@ -16,6 +20,8 @@ export const navItems = [
 ];
 
 const App = () => {
+  const { session } = useSupabase();
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -24,7 +30,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />
-              {/* Add more routes here as needed */}
+              <Route path="sign-up" element={<SignUp />} />
+              <Route path="sign-in" element={<SignIn />} />
             </Route>
           </Routes>
         </Router>
