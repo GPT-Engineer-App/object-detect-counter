@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Spinner from '@/components/ui/Spinner';
 import { useCreateEvent, useReadEvents, useUpdateEvent, useDeleteEvent } from '@/integrations/supabase';
+import { useSupabase } from '@/integrations/supabase';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
   const [newEventName, setNewEventName] = useState('');
-  const { data: events, isLoading: isLoadingEvents } = useReadEvents();
+  const { data: events, isLoading: isLoadingEvents, refetch } = useReadEvents();
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
   const deleteEvent = useDeleteEvent();
+  const { supabase } = useSupabase();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('public:events')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, () => {
+        refetch();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, refetch]);
 
   const handleCreateEvent = async () => {
     setLoading(true);
